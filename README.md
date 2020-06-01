@@ -1,2 +1,2 @@
-# new_repo
-An example repo to learn git for R
+# R_Users_Group
+A repository for R users group resources 
