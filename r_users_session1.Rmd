@@ -1,5 +1,5 @@
 ---
-title: r_users_session1.utf8
+title: "R Users Group: Session 1 (Introduction)"
 output:
   html_document: default
 ---
@@ -9,17 +9,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```
 
-## R Users Group: Session 1 (Introduction) ##
+In this "Introduction to R" session we will split in to small groups to work through some basic exercises using the measles dataset\*. The data is based on WHO data for measles and rubella and has been adapted to contain information for measles only. The exercises are designed to direct some basic, exploratory data analysis and practice foundational skills in using R. When working through the exercises please do discuss within your group and support people with different experience levels. Once each group has completed the task we will have a short feedback session to discuss the different approaches used for each exercise. 
+
+\*Official data based on monthly data reported to WHO (Geneva) as of May 2020, see here for original data: https://www.who.int/immunization/monitoring_surveillance/burden/vpd/surveillance_type/active/measles_monthlydata/en/
 
 ### Exercises: 
 **1. Import your data**  
-* Import the measles dataset into the R environment, assigning it to an appropriate variable  
+
+- Import the measles dataset into the R environment, assigning it to an appropriate variable  
 *Hint: Set your working directory to the folder where the data is stored as your first step*
 
 ```{r}
 
 #Set working directory:
-setwd("~/OneDrive - Royal Veterinary College/PhD_year1/R_users_group")
+setwd("~/R_users_group")
 
 #Read in dataset and assign to an appropriate variable "measles_data"
 measles_data <- read.csv("measlesreportedcasesbycountry.csv")
@@ -62,21 +65,21 @@ summary(measles_data)
 
 ```{r eval=FALSE}
 #Which country had the highest number of cases in 2019?
-max_cases_2019 <- which.max(measles_data$Total.confirmed.measles.cases.2019) #find the index
+max_cases_2019 <- which.max(measles_data$confirmed_cases_2019) #find the index
 measles_data[max_cases_2019, 1] #which country?
-measles_data[max_cases_2019, "Total.confirmed.measles.cases.2019"] #how many cases
+measles_data[max_cases_2019, confirmed_cases_2019] #how many cases
 
 #How many countries recorded no measles cases in 2019
-No_cases_2019 <- length(which(measles_data$Total.confirmed.measles.cases.2019 == 0))
+No_cases_2019 <- length(which(measles_data$confirmed_cases_2019 == 0))
 
 #How many cases has Belgium confirmed so far in 2020?
-Belgium_cases_2020 <- measles_data[measles_data$Member.State == "Belgium", "Total.suspected.measles.cases.2020"]
+Belgium_cases_2020 <- measles_data[measles_data$member_state == "Belgium", "suspected_cases_2020"]
 
 #How many countries recorded have recorded fewer cases than Belgium so far in 2020?
-length(which(measles_data$Total.suspected.measles.cases.2020<Belgium_cases_2020))
+length(which(measles_data$suspected_cases_2020<Belgium_cases_2020))
 
 #Add a new column with the proportion of suspected cases that have been confirmed for 2020
-measles_data$proportion_confirmed_2020 <- (measles_data$Total.confirmed..measles.cases.2020)/(measles_data$Total.suspected.measles.cases.2020)
+measles_data$proportion_confirmed_2020 <- (measles_data$confirmed_cases_2020)/(measles_data$suspected_cases_2020)
 ```
 
 
@@ -87,21 +90,24 @@ measles_data$proportion_confirmed_2020 <- (measles_data$Total.confirmed..measles
 - Recode the data in the column for suspected cases as a binary variable, with values above the median coded as "high" and values below the median coded as "low".  
 *You may wish to copy the column of data first and work on the copied data*
 
-```{r eval=TRUE}
-
+```{r eval=FALSE}
 #Create a new dataframe containing only the Americas region
 americas <- measles_data[measles_data$Region=="AMRO", ]
 
 #Remove the data for 2019
-americas <- americas[,-6]
+americas <- americas[,-c(6:7)]
 
 #Remove NAs
 americas <- na.omit(americas)
 
 #Recode suspected cases as binary variable
-americas_median <- median(americas$Total.suspected.measles.cases.2020)
-americas$suspected_cases_binary <- americas$Total.suspected.measles.cases.2020
+americas_median <- median(americas$suspected_cases_2020)
+americas$suspected_cases_binary <- americas$suspected_cases_2020
 americas$suspected_cases_binary <- ifelse(americas$suspected_cases_binary>=americas_median, "High", "Low")
+
+#What type of data is this, can you plot it as a barplot?
+plot(as.factor(americas$suspected_cases_binary)) #Class of column is character data, so must be converted to a factor for plotting
+
 
 ```
 
