@@ -1,0 +1,43 @@
+---
+title: "R Users Group: Session 1 (Introduction)"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+In this "Introduction to R" session we will split in to small groups to work through some basic exercises using the measles dataset\*. The data is based on WHO data for measles and rubella and has been adapted to contain information for measles only. The exercises are designed to direct some basic, exploratory data analysis and practice foundational skills in using R. When working through the exercises please do discuss within your group and support people with different experience levels. Once each group has completed the task we will have a short feedback session to discuss the different approaches used for each exercise. 
+
+\*Official data based on monthly data reported to WHO (Geneva) as of May 2020, see here for original data: https://www.who.int/immunization/monitoring_surveillance/burden/vpd/surveillance_type/active/measles_monthlydata/en/
+
+### Exercises: 
+**1. Import your data**  
+
+- Import the measles dataset into the R environment, assigning it to an appropriate variable  
+*Hint: Set your working directory to the folder where the data is stored as your first step*
+
+
+**2. Explore the dataset:**  
+
+- What information is contained within the dataset?  
+- What variables are there within the dataset and what type of data is stored within each column?  
+- What are the dimensions of the dataset, what do these numbers correspond to?  
+- Provide some summary descriptive statistics for the dataset  
+
+**3. Further investigations**
+
+- Which country recorded the highest number of measles cases in 2019 and how many cases were recorded?  
+- How many countries had 0 measles cases in 2019?  
+- How many cases has Belgium confirmed so far in 2020, store your answer in the variable "Belgium_cases_2019"?  
+- Add a column to the dataset which contains the proportion of suspected cases which have been confirmed for 2020  
+
+
+**4. Investigate data for the Americas**  
+
+- Create a new dataframe containing only information for the Americas (AMRO) region  
+- Remove the data for 2019 and remove all rows containing NAs  
+- Recode the data in the column for suspected cases as a binary variable, with values above the median coded as "high" and values below the median coded as "low".  
+*You may wish to copy the column of data first and work on the copied data*

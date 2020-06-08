@@ -1,5 +1,5 @@
 ---
-title: "R Users Group: Session 1 (Introduction)"
+title: "Session 1 (Introduction) with solutions"
 output:
   html_document: default
 ---
