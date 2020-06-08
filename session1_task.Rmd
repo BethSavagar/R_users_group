@@ -28,9 +28,13 @@ In this "Introduction to R" session we will split in to small groups to work thr
 - What variables are there within the dataset and what type of data is stored within each column?  
 - What are the dimensions of the dataset, what do these numbers correspond to?  
 - Provide some summary descriptive statistics for the dataset  
+- How many listed countries are in each region? (Tabulate)
+
 
 **3. Further investigations**
 
+- What's the mean and median number of confirmed measles cases in 2019? (remember to add the argument "na.rm" to remove NAs!)
+- What's the median number of confirmed measles cases in 2019 for each Region? (This can be excecuted in a single line of code)
 - Which country recorded the highest number of measles cases in 2019 and how many cases were recorded?  
 - How many countries had 0 measles cases in 2019?  
 - How many cases has Belgium confirmed so far in 2020, store your answer in the variable "Belgium_cases_2019"?  
@@ -41,5 +45,13 @@ In this "Introduction to R" session we will split in to small groups to work thr
 
 - Create a new dataframe containing only information for the Americas (AMRO) region  
 - Remove the data for 2019 and remove all rows containing NAs  
-- Recode the data in the column for suspected cases as a binary variable, with values above the median coded as "high" and values below the median coded as "low".  
+- Recode the data in the column for suspected cases as a binary variable, with values above the median coded as "high" and values below the median coded as "low"  
+- How many countries are "high" and "low" and what proportion? (Tabulate the data)
 *You may wish to copy the column of data first and work on the copied data*
+
+
+**5. Saving your work**
+
+- Save your script 
+- Save your 'workspace' (all of the R objects you have created in this session)
+
