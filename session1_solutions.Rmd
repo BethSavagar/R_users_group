@@ -35,6 +35,8 @@ measles_data <- read.csv("measlesreportedcasesbycountry.csv")
 - What variables are there within the dataset and what type of data is stored within each column?  
 - What are the dimensions of the dataset, what do these numbers correspond to?  
 - Provide some summary descriptive statistics for the dataset  
+- How many listed countries are in each region? (Tabulate)
+
 
 ```{r eval = FALSE}
 
@@ -53,21 +55,33 @@ dim(measles_data) #rows (countries) and columns (variables)
 #Provide some summary stats for the dataset
 summary(measles_data)
 
+#How many listed countries are in each region?
+table(measles_data$Region)
+
 ```
 
 
 **3. Further investigations**
 
+- What's the mean and median number of confirmed measles cases in 2019? (remember to add the argument "na.rm" to remove NAs!)
+- What's the median number of confirmed measles cases in 2019 for each Region? (This can be excecuted in a single line of code)
 - Which country recorded the highest number of measles cases in 2019 and how many cases were recorded?  
 - How many countries had 0 measles cases in 2019?  
 - How many cases has Belgium confirmed so far in 2020, store your answer in the variable "Belgium_cases_2019"?  
 - Add a column to the dataset which contains the proportion of suspected cases which have been confirmed for 2020  
 
 ```{r eval=FALSE}
+#What's the mean and median number of confirmed measles cases in 2019? (remember to add the argument "na.rm" to remove NAs!) 
+mean(measles_data$confirmed_cases_2019, na.rm = TRUE)
+median(measles_data$confirmed_cases_2019, na.rm = TRUE)
+
+#What's the median number of confirmed measles cases in 2019 for each Region? (This can be excecuted in a single line of code)
+aggregate(confirmed_cases_2019 ~  Region, measles_data, median)
+
 #Which country had the highest number of cases in 2019?
 max_cases_2019 <- which.max(measles_data$confirmed_cases_2019) #find the index
-measles_data[max_cases_2019, 1] #which country?
-measles_data[max_cases_2019, confirmed_cases_2019] #how many cases
+measles_data[max_cases_2019, 2] #which country?
+measles_data[max_cases_2019, "confirmed_cases_2019"] #how many cases
 
 #How many countries recorded no measles cases in 2019
 No_cases_2019 <- length(which(measles_data$confirmed_cases_2019 == 0))
@@ -88,14 +102,19 @@ measles_data$proportion_confirmed_2020 <- (measles_data$confirmed_cases_2020)/(m
 - Create a new dataframe containing only information for the Americas (AMRO) region  
 - Remove the data for 2019 and remove all rows containing NAs  
 - Recode the data in the column for suspected cases as a binary variable, with values above the median coded as "high" and values below the median coded as "low".  
+- How many countries are "high" and "low" and what proportion? (Tabulate the data)
 *You may wish to copy the column of data first and work on the copied data*
 
 ```{r eval=FALSE}
 #Create a new dataframe containing only the Americas region
 americas <- measles_data[measles_data$Region=="AMRO", ]
+# or alternatively
+americas <- subset(measles_data, Region == "AMRO")
 
 #Remove the data for 2019
 americas <- americas[,-c(6:7)]
+#or alternatively
+americas <- subset(americas, select = -c(confirmed_cases_2019, incidence_rate_per_1mil_2019))
 
 #Remove NAs
 americas <- na.omit(americas)
@@ -108,6 +127,26 @@ americas$suspected_cases_binary <- ifelse(americas$suspected_cases_binary>=ameri
 #What type of data is this, can you plot it as a barplot?
 plot(as.factor(americas$suspected_cases_binary)) #Class of column is character data, so must be converted to a factor for plotting
 
+#How many countries are "high" and "low" and what proportion? (Tabulate the data)
+americas_table <- table(americas$suspected_cases_binary)
+prop.table(americas_table)
 
 ```
 
+
+**5. Saving your work **  
+
+- Save your script 
+- Save your 'workspace' (all of the R objects you have created in this session)
+
+```{r eval=FALSE}
+# Save your script 
+# Just use File > Save as
+
+# Save your 'workspace' (all of the R objects you have created in this session)
+save.image("session1.Rdata")
+
+# When you close down R, it will ask you: "Save workspace image to C:/Program Files.../RData?" Click NO
+# otherwise you will not have a nice blank session to work with when you begin a new session. 
+
+```
