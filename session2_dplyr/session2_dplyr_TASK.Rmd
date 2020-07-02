@@ -1,0 +1,17 @@
+---
+title: "R_Users_2_dplyr"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## What is dplyr?
+
+text explaining dplyr
+
+Set up
+```{r echo - TRUE}
+library(dplyr)
+```
