@@ -1,5 +1,5 @@
 ---
-title: "R_Users_2_dplyr"
+title: "R Users Group: Session 2 (dplyr)"
 output: html_document
 ---
 
@@ -7,11 +7,45 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+# INTRODUCTION: 
+
 ## What is dplyr?
 
-text explaining dplyr
+In this session we will be focusing on **data manipulation** with the `dplyr` package. Dplyr is one of the packages within the `tidyverse` group, which contains a number of core R packages including `dplyr`, `ggplot2`, `tidyr`, `purrr` amongst others. The tidyverse is a group of packages which are designed to simplify data science and share a common design philosophy, 'grammar' and data structures (see here for more information about the tidyverse: https://www.tidyverse.org/).
 
-Set up
-```{r echo - TRUE}
+When working with datasets, they won't often come in the form that you want or need them - in this case it may be necessary to create subsets of data, add new variables, or rename them to make things easier to understand. Most of this **can be achieved** using base R commands but `dplyr` provides an alternative (neater, simpler?) way to do these manipulations. The `dplyr` package provides a 'grammar' of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: 
+For more information on dplyr: https://dplyr.tidyverse.org/
+
+- `filter()`
+- `arrange()`
+- `select()`
+- `mutate()`
+- `summarise()`
+
+*All 5 functions can be used with `group_by()` which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using `summarise(mean = mean(height))` with `group_by(sex)` will return the mean height for boys and girls, rather than the mean height for all children in the dataset. *
+
+The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) one of the ... of R/coding is that there are often multiple solutions to the same  problem, so feel free to explore these or use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer. 
+
+**Support/resources**
+
+An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for Data Science textbook (https://r4ds.had.co.nz/transform.html). This is the perfect resource to support this session and to defer to for further help with manipulating data.  
+
+
+
+# TASKS 
+
+### Step 1: Set up
+
+1. Load the `dplyr` package into the R workspace.  
+*Note: dplyr is contained within the tidyverse package, you can therefore choose whether to load the full tidyverse or only dplyr for this session*
+
+
+```{r echo = TRUE}
+
+#install.packages("tidyverse")
+#install.packages("dplyr")
+
+library(tidyverse)
 library(dplyr)
 ```
