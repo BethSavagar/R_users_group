@@ -40,6 +40,10 @@ An excellent introduction to data manipulation and transformation in R, using th
 1. Load the `dplyr` package into the R workspace.  
 *Note: dplyr is contained within the tidyverse package, you can therefore choose whether to load the full tidyverse or only dplyr for this session*
 
+2. Load your data (we will use the measles dataset introduced in the previous session)  
+*Reminder: you will need to use `setwd()` to set the working directory for this session before you read in the .csv file*  
+- You may wish to explore the dataset to remind yourselves of its contents using some **baseR** commands e.g. `head()`, `View()`, `str()`  
+- Before moving on to any further exercises remove any NAs from the dataset using e.g. `na.omit()` or `complete.cases()`
 
 ```{r echo = TRUE}
 
@@ -48,4 +52,56 @@ An excellent introduction to data manipulation and transformation in R, using th
 
 library(tidyverse)
 library(dplyr)
+library(here) #an alternative to setwd()
+
+
+#Load the measles dataset
+measles_data <- read.csv(here("session2_dplyr/measlesreportedcasesbycountry.csv"))
+head(measles_data)
+
+#Remove NAs from the dataset
+measles_data <- na.omit(measles_data)
+# OR
+# measles_data <- measles_data[complete.cases(measles_data), ]
 ```
+
+
+
+
+### Step YY: Using group_by() 
+
+```{r echo = TRUE}
+
+measles_data %>% group_by(Region) %>% summarise(mean_cases_2019 = mean(confirmed_cases_2019),
+                                                min_cases_2019 = min(confirmed_cases_2019),
+                                                max_cases_2019 = max(confirmed_cases_2019))
+
+```
+
+
+### Step XX: Creating new dataframes
+
+1. Create two new datasets, one containing the measles data for 2019 and one containing measles data for 2020 
+*NB: include the Region, member_state and country_code variables in both datasets* 
+
+Using dplyr:
+```{r echo=TRUE}
+
+# Use the select() function to select the variables which you want to be contained in the new dataset
+
+#Create the 2019 dataset
+measles_2019 <- measles_data %>% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)
+
+# Create the 2020 dataset
+measles_2020 <- measles_data %>% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)
+
+```
+
+Using baseR:
+
+- `measles_2019 <- measles_data[ , c(1:3,6:7)]` - *creates a new dataframe by indexing, selecting the columns to keep in the measles_data dataframe.*  
+
+OR  
+
+- `measles_2019 <- measles_data[ , -c(4:5)]` - *creates a new dataframe by indexing, removing the unwanted columns in the measles_data dataframe.* 
+
