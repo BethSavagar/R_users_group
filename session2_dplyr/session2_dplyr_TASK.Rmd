@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this session we will be focusing on **data manipulation** with the `dplyr` package. Dplyr is one of the packages within the `tidyverse` group, which contains a number of core R packages including `dplyr`, `ggplot2`, `tidyr`, `purrr` amongst others. The tidyverse is a group of packages which are designed to simplify data science and share a common design philosophy, 'grammar' and data structures (see here for more information about the tidyverse: https://www.tidyverse.org/).
 
-When working with datasets, they won't often come in the form that you want or need them - in this case it may be necessary to create subsets of data, add new variables, or rename them to make things easier to understand. Most of this **can be achieved** using base R commands but `dplyr` provides an alternative (neater, simpler?) way to do these manipulations. The `dplyr` package provides a 'grammar' of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: 
+When working with datasets, they won't often come in the form that you want or need them - in this case it may be necessary to group variables, create subsets of data, arrange observations or add new variables entirely to make things easier to understand. Most of this **can be achieved** using base R commands but `dplyr` provides an alternative (neater, simpler?) way to do these manipulations. The `dplyr` package provides a 'grammar' of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: 
 For more information on dplyr: https://dplyr.tidyverse.org/
 
 - `filter()`
@@ -25,7 +25,7 @@ For more information on dplyr: https://dplyr.tidyverse.org/
 
 *All 5 functions can be used with `group_by()` which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using `summarise(mean = mean(height))` with `group_by(sex)` will return the mean height for boys and girls, rather than the mean height for all children in the dataset. *
 
-The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) one of the ... of R/coding is that there are often multiple solutions to the same  problem, so feel free to explore these or use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer. 
+The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) in R/coding there are often multiple solutions to the same problem, so feel free to explore these and use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer. 
 
 **Support/resources**
 
@@ -66,7 +66,72 @@ measles_data <- na.omit(measles_data)
 ```
 
 
+### Part AA: Using `select()`
 
+1. Create two new datasets, one containing the measles data for 2019 and one containing measles data for 2020 
+*NB: include the Region, member_state and country_code variables in both datasets* 
+
+Using dplyr:
+```{r echo=TRUE}
+
+# Use the select() function to select the variables which you want to be contained in the new dataset
+
+#Create the 2019 dataset
+measles_2019 <-
+  measles_data %>% select(
+    Region,
+    member_state,
+    country_code,
+    confirmed_cases_2019,
+    incidence_rate_per_1mil_2019
+  )
+
+#OR
+
+# measles_data %>% select(Region:country_code, confirmed_cases_2019:incidence_rate_per_1mil_2019)
+
+#OR
+
+# measles_data %>% select(-(suspected_cases_2020:confirmed_cases_2020))
+
+
+# Create the 2020 dataset
+measles_2020 <- measles_data %>% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)
+
+
+```
+
+Using baseR:
+
+Creating a new dataframe for the measles data
+
+- `measles_2019 <- measles_data[ , c(1:3,6:7)]` - *creates a new dataframe by indexing, selecting the columns to keep in the measles_data dataframe.*  
+
+OR  
+
+- `measles_2019 <- measles_data[ , -c(4:5)]` - *creates a new dataframe by indexing, removing the unwanted columns in the measles_data dataframe.* 
+
+
+### Part BB: Using `filter()`
+
+1. Create a dataframe which contains only measles data for the European region (EURO)
+
+With dplyr:
+
+```{r echo = TRUE}
+
+# Create a dataset which contains only measles data for the EURO region
+measles_EURO <- measles_data %>% filter(Region == "EURO")
+
+```
+
+With baseR:
+
+- `measles_EURO <- subset(measles_data, Region == "EURO")` - using the subset function (similar structure to `filter()`)
+
+OR
+
+- `measles_EURO <- measles_data[which(measles_data$Region == "EURO"), ]`
 
 ### Step YY: Using group_by() 
 
@@ -79,29 +144,5 @@ measles_data %>% group_by(Region) %>% summarise(mean_cases_2019 = mean(confirmed
 ```
 
 
-### Step XX: Creating new dataframes
 
-1. Create two new datasets, one containing the measles data for 2019 and one containing measles data for 2020 
-*NB: include the Region, member_state and country_code variables in both datasets* 
-
-Using dplyr:
-```{r echo=TRUE}
-
-# Use the select() function to select the variables which you want to be contained in the new dataset
-
-#Create the 2019 dataset
-measles_2019 <- measles_data %>% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)
-
-# Create the 2020 dataset
-measles_2020 <- measles_data %>% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)
-
-```
-
-Using baseR:
-
-- `measles_2019 <- measles_data[ , c(1:3,6:7)]` - *creates a new dataframe by indexing, selecting the columns to keep in the measles_data dataframe.*  
-
-OR  
-
-- `measles_2019 <- measles_data[ , -c(4:5)]` - *creates a new dataframe by indexing, removing the unwanted columns in the measles_data dataframe.* 
 

@@ -384,7 +384,7 @@ summary {
 <div id="what-is-dplyr" class="section level2">
 <h2>What is dplyr?</h2>
 <p>In this session we will be focusing on <strong>data manipulation</strong> with the <code>dplyr</code> package. Dplyr is one of the packages within the <code>tidyverse</code> group, which contains a number of core R packages including <code>dplyr</code>, <code>ggplot2</code>, <code>tidyr</code>, <code>purrr</code> amongst others. The tidyverse is a group of packages which are designed to simplify data science and share a common design philosophy, ‘grammar’ and data structures (see here for more information about the tidyverse: <a href="https://www.tidyverse.org/" class="uri">https://www.tidyverse.org/</a>).</p>
-<p>When working with datasets, they won’t often come in the form that you want or need them - in this case it may be necessary to create subsets of data, add new variables, or rename them to make things easier to understand. Most of this <strong>can be achieved</strong> using base R commands but <code>dplyr</code> provides an alternative (neater, simpler?) way to do these manipulations. The <code>dplyr</code> package provides a ‘grammar’ of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: For more information on dplyr: <a href="https://dplyr.tidyverse.org/" class="uri">https://dplyr.tidyverse.org/</a></p>
+<p>When working with datasets, they won’t often come in the form that you want or need them - in this case it may be necessary to group variables, create subsets of data, arrange observations or add new variables entirely to make things easier to understand. Most of this <strong>can be achieved</strong> using base R commands but <code>dplyr</code> provides an alternative (neater, simpler?) way to do these manipulations. The <code>dplyr</code> package provides a ‘grammar’ of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: For more information on dplyr: <a href="https://dplyr.tidyverse.org/" class="uri">https://dplyr.tidyverse.org/</a></p>
 <ul>
 <li><code>filter()</code></li>
 <li><code>arrange()</code></li>
@@ -393,7 +393,7 @@ summary {
 <li><code>summarise()</code></li>
 </ul>
 <p><em>All 5 functions can be used with <code>group_by()</code> which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using <code>summarise(mean = mean(height))</code> with <code>group_by(sex)</code> will return the mean height for boys and girls, rather than the mean height for all children in the dataset. </em></p>
-<p>The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) one of the … of R/coding is that there are often multiple solutions to the same problem, so feel free to explore these or use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer.</p>
+<p>The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) in R/coding there are often multiple solutions to the same problem, so feel free to explore these and use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer.</p>
 <p><strong>Support/resources</strong></p>
 <p>An excellent introduction to data manipulation and transformation in R, using the <code>tidyverse</code> and <code>dplyr</code>, is given in Chapter 5 of the R for Data Science textbook (<a href="https://r4ds.had.co.nz/transform.html" class="uri">https://r4ds.had.co.nz/transform.html</a>). This is the perfect resource to support this session and to defer to for further help with manipulating data.</p>
 </div>
@@ -412,22 +412,22 @@ summary {
 <ul>
 <li>You may wish to explore the dataset to remind yourselves of its contents using some <strong>baseR</strong> commands e.g. <code>head()</code>, <code>View()</code>, <code>str()</code><br />
 </li>
-<li>Before moving on to any further exercises remove any NAs from the dataset using e.g. <code>na.omit()</code> or <code>complete.cases</code></li>
+<li>Before moving on to any further exercises remove any NAs from the dataset using e.g. <code>na.omit()</code> or <code>complete.cases()</code></li>
 </ul>
 <pre class="r"><code>#install.packages(&quot;tidyverse&quot;)
 #install.packages(&quot;dplyr&quot;)
 
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
 <pre><code>## ✓ ggplot2 3.3.0     ✓ purrr   0.3.3
 ## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
 ## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
 ## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(dplyr)
-library(here)</code></pre>
+library(here) #an alternative to setwd()</code></pre>
 <pre><code>## here() starts at /Users/bethsavagar/OneDrive - Royal Veterinary College/R_users_group</code></pre>
 <pre class="r"><code>#Load the measles dataset
 measles_data &lt;- read.csv(here(&quot;session2_dplyr/measlesreportedcasesbycountry.csv&quot;))
@@ -451,8 +451,8 @@ measles_data &lt;- na.omit(measles_data)
 # OR
 # measles_data &lt;- measles_data[complete.cases(measles_data), ]</code></pre>
 </div>
-<div id="step-xx-creating-new-dataframes" class="section level3">
-<h3>Step XX: Creating new dataframes</h3>
+<div id="part-aa-using-select" class="section level3">
+<h3>Part AA: Using <code>select()</code></h3>
 <ol style="list-style-type: decimal">
 <li>Create two new datasets, one containing the measles data for 2019 and one containing measles data for 2020 <em>NB: include the Region, member_state and country_code variables in both datasets</em></li>
 </ol>
@@ -460,11 +460,28 @@ measles_data &lt;- na.omit(measles_data)
 <pre class="r"><code># Use the select() function to select the variables which you want to be contained in the new dataset
 
 #Create the 2019 dataset
-measles_2019 &lt;- measles_data %&gt;% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)
+measles_2019 &lt;-
+  measles_data %&gt;% select(
+    Region,
+    member_state,
+    country_code,
+    confirmed_cases_2019,
+    incidence_rate_per_1mil_2019
+  )
+
+#OR
+
+# measles_data %&gt;% select(Region:country_code, confirmed_cases_2019:incidence_rate_per_1mil_2019)
+
+#OR
+
+# measles_data %&gt;% select(-(suspected_cases_2020:confirmed_cases_2020))
+
 
 # Create the 2020 dataset
 measles_2020 &lt;- measles_data %&gt;% select(Region, member_state, country_code, confirmed_cases_2019, incidence_rate_per_1mil_2019)</code></pre>
 <p>Using baseR:</p>
+<p>Creating a new dataframe for the measles data</p>
 <ul>
 <li><code>measles_2019 &lt;- measles_data[ , c(1:3,6:7)]</code> - <em>creates a new dataframe by indexing, selecting the columns to keep in the measles_data dataframe.</em></li>
 </ul>
@@ -472,6 +489,38 @@ measles_2020 &lt;- measles_data %&gt;% select(Region, member_state, country_code
 <ul>
 <li><code>measles_2019 &lt;- measles_data[ , -c(4:5)]</code> - <em>creates a new dataframe by indexing, removing the unwanted columns in the measles_data dataframe.</em></li>
 </ul>
+</div>
+<div id="part-bb-using-filter" class="section level3">
+<h3>Part BB: Using <code>filter()</code></h3>
+<ol start="2" style="list-style-type: decimal">
+<li>Create a dataframe which contains only measles data for the European region (EURO)</li>
+</ol>
+<p>With dplyr:</p>
+<pre class="r"><code># Create a dataset which contains only measles data for the EURO region
+measles_EURO &lt;- measles_data %&gt;% filter(Region == &quot;EURO&quot;)</code></pre>
+<p>With baseR:</p>
+<ul>
+<li><code>measles_EURO &lt;- subset(measles_data, Region == &quot;EURO&quot;)</code> - using the subset function (similar structure to <code>filter()</code>)</li>
+</ul>
+<p>OR</p>
+<ul>
+<li><code>measles_EURO &lt;- measles_data[which(measles_data$Region == &quot;EURO&quot;), ]</code></li>
+</ul>
+</div>
+<div id="step-yy-using-group_by" class="section level3">
+<h3>Step YY: Using group_by()</h3>
+<pre class="r"><code>measles_data %&gt;% group_by(Region) %&gt;% summarise(mean_cases_2019 = mean(confirmed_cases_2019),
+                                                min_cases_2019 = min(confirmed_cases_2019),
+                                                max_cases_2019 = max(confirmed_cases_2019))</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   Region mean_cases_2019 min_cases_2019 max_cases_2019
+##   &lt;fct&gt;            &lt;dbl&gt;          &lt;int&gt;          &lt;int&gt;
+## 1 AFRO             7545.              0         213291
+## 2 AMRO              876.              0          19326
+## 3 EMRO              612.              0           3555
+## 4 EURO             2010.              0          57440
+## 5 SEARO            2693               0          10695
+## 6 WPRO             2604.              0          47722</code></pre>
 </div>
 </div>
 
