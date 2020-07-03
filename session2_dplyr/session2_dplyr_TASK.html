@@ -11,7 +11,7 @@
 
 
 
-<title>R_Users_2_dplyr</title>
+<title>R Users Group: Session 2 (dplyr)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -374,24 +374,52 @@ summary {
 
 
 
-<h1 class="title toc-ignore">R_Users_2_dplyr</h1>
+<h1 class="title toc-ignore">R Users Group: Session 2 (dplyr)</h1>
 
 </div>
 
 
+<div id="introduction" class="section level1">
+<h1>INTRODUCTION:</h1>
 <div id="what-is-dplyr" class="section level2">
 <h2>What is dplyr?</h2>
-<p>text explaining dplyr</p>
-<p>Set up</p>
+<p>In this session we will be focusing on <strong>data manipulation</strong> with the <code>dplyr</code> package. Dplyr is one of the packages within the <code>tidyverse</code> group, which contains a number of core R packages including <code>dplyr</code>, <code>ggplot2</code>, <code>tidyr</code>, <code>purrr</code> amongst others. The tidyverse is a group of packages which are designed to simplify data science and share a common design philosophy, ‘grammar’ and data structures (see here for more information about the tidyverse: <a href="https://www.tidyverse.org/" class="uri">https://www.tidyverse.org/</a>).</p>
+<p>When working with datasets, they won’t often come in the form that you want or need them - in this case it may be necessary to create subsets of data, add new variables, or rename them to make things easier to understand. Most of this <strong>can be achieved</strong> using base R commands but <code>dplyr</code> provides an alternative (neater, simpler?) way to do these manipulations. The <code>dplyr</code> package provides a ‘grammar’ of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: For more information on dplyr: <a href="https://dplyr.tidyverse.org/" class="uri">https://dplyr.tidyverse.org/</a></p>
+<ul>
+<li><code>filter()</code></li>
+<li><code>arrange()</code></li>
+<li><code>select()</code></li>
+<li><code>mutate()</code></li>
+<li><code>summarise()</code></li>
+</ul>
+<p><em>All 5 functions can be used with <code>group_by()</code> which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using <code>summarise(mean = mean(height))</code> with <code>group_by(sex)</code> will return the mean height for boys and girls, rather than the mean height for all children in the dataset. </em></p>
+<p>The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) one of the … of R/coding is that there are often multiple solutions to the same problem, so feel free to explore these or use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer.</p>
+<p><strong>Support/resources</strong></p>
+<p>An excellent introduction to data manipulation and transformation in R, using the <code>tidyverse</code> and <code>dplyr</code>, is given in Chapter 5 of the R for Data Science textbook (<a href="https://r4ds.had.co.nz/transform.html" class="uri">https://r4ds.had.co.nz/transform.html</a>). This is the perfect resource to support this session and to defer to for further help with manipulating data.</p>
+</div>
+</div>
+<div id="tasks" class="section level1">
+<h1>TASKS</h1>
+<div id="step-1-set-up" class="section level2">
+<h2>Step 1: Set up</h2>
+<ol style="list-style-type: decimal">
+<li>Load the <code>dplyr</code> package into the R workspace.<br />
+<em>Note: dplyr is contained within the tidyverse package, you can therefore choose whether to load the full tidyverse or only dplyr for this session</em></li>
+</ol>
+<pre class="r"><code>#install.packages(&quot;tidyverse&quot;)
+#install.packages(&quot;dplyr&quot;)
+
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.0     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.4
+## ✓ tidyr   1.0.2     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
+</div>
 </div>
 
 
