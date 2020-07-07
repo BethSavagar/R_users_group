@@ -1,0 +1,175 @@
+---
+title: "R Users Group: Session 2 (dplyr)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# INTRODUCTION: 
+
+## What is dplyr?
+
+In this session we will be focusing on **data manipulation** with the `dplyr` package. Dplyr is one of the packages within the `tidyverse` group, which contains a number of core R packages including `dplyr`, `ggplot2`, `tidyr`, `purrr` amongst others. The tidyverse is a group of packages which are designed to simplify data science and share a common design philosophy, 'grammar' and data structures (see here for more information about the tidyverse: https://www.tidyverse.org/).
+
+When working with datasets, they won't often come in the form that you want or need them - in this case it may be necessary to create subsets of data, add new variables, or rename them to make things easier to understand. Most of this **can be achieved** using base R commands but `dplyr` provides an alternative (neater, simpler?) way to do these manipulations. The `dplyr` package provides a 'grammar' of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: 
+For more information on dplyr: https://dplyr.tidyverse.org/
+
+- `filter()`    (chose rows based on column values; like filter in Excel)
+- `arrange()`   (change the order or rows; like sort in Excel)
+- `select()`    (change whether or not a column is selected)
+- `mutate()`    (for creating new variables)
+- `summarise()` (collapse a group into a single row)
+
+*All 5 functions can be used with `group_by()` which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using `summarise(mean = mean(height))` with `group_by(sex)` will return the mean height for boys and girls, rather than the mean height for all children in the dataset. *
+
+The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) one of the ... of R/coding is that there are often multiple solutions to the same  problem, so feel free to explore these or use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer. 
+
+**Support/resources**
+
+An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for Data Science textbook (https://r4ds.had.co.nz/transform.html). This is the perfect resource to support this session and to defer to for further help with manipulating data.  
+
+We will be going over the exercises in this book today. 
+
+\newline
+\newline
+
+
+# CHEAT SHEET
+
+## Important points
+
+Throughout these excercises, you can use the 'pipe' operator %>% which allows you to write clear code which can be read from left to right. The pipe takes the result of the thing before it, and 'pipes' it into the next function.
+
+x %>% f(y) turns into f(x, y) 
+
+
+\newline
+\newline
+
+
+# EXERCISES 
+
+### Set up
+
+1. Load the `dplyr` package into the R workspace.  
+*Note: dplyr is contained within the tidyverse package, you can therefore choose whether to load the full tidyverse or only dplyr for this session*
+
+2. Load your data (we will use the publicly available 'flights' dataset)  
+*Reminder: you will need to use `setwd()` to set the working directory for this session before you read in the .csv file*  
+- You may wish to explore the dataset to remind yourselves of its contents using some **baseR** commands e.g. `head()`, `View()`, `str()`  
+
+```{r eval=FALSE}
+
+#install.packages("tidyverse")
+#install.packages("dplyr")
+
+library(tidyverse)
+library(dplyr)
+
+
+#Load the flights data
+library(nycflights13)
+head(flights)
+
+```
+
+
+### filter()
+
+1.  Find all flights that
+
+    1. Had an arrival delay of two or more hours
+    1. Flew to Houston (`IAH` or `HOU`)
+    1. Were operated by United, American, or Delta
+    1. Departed in summer (July, August, and September)
+    1. Arrived more than two hours late, but didn't leave late
+    1. Were delayed by at least an hour, but made up over 30 minutes in flight
+    1. Departed between midnight and 6am (inclusive)
+
+1.  Another useful dplyr filtering helper is `between()`. What does it do?
+    Can you use it to simplify the code needed to answer the previous 
+    challenges?
+
+1.  How many flights have a missing `dep_time`? What other variables are 
+    missing? What might these rows represent?
+
+
+ 
+### arrange()
+
+1.  How could you use `arrange()` to sort all missing values to the start?
+    (Hint: use `is.na()`).
+    
+1.  Sort `flights` to find the most delayed flights. Find the flights that
+    left earliest.
+
+1.  Sort `flights` to find the fastest (highest speed) flights.
+
+1.  Which flights travelled the farthest? Which travelled the shortest?
+
+
+
+### select()
+
+1.  Brainstorm as many ways as possible to select `dep_time`, `dep_delay`,
+    `arr_time`, and `arr_delay` from `flights`.
+    
+1.  What happens if you include the name of a variable multiple times in
+    a `select()` call?
+  
+1.  What does the `one_of()` function do? Why might it be helpful in conjunction
+    with this vector?
+    
+    ```{r}
+    vars <- c("year", "month", "day", "dep_delay", "arr_delay")
+    ```
+    
+1.  Does the result of running the following code surprise you?  How do the
+    select helpers deal with case by default? How can you change that default?
+
+    ```{r, eval = FALSE}
+    select(flights, contains("TIME"))
+    ```
+
+
+
+### mutate()
+
+
+```{r, eval = FALSE, echo = FALSE}
+flights <- flights %>% mutate(
+  dep_time = hour * 60 + minute,
+  arr_time = (arr_time %/% 100) * 60 + (arr_time %% 100),
+  airtime2 = arr_time - dep_time,
+  dep_sched = dep_time + dep_delay
+)
+
+ggplot(flights, aes(dep_sched)) + geom_histogram(binwidth = 60)
+ggplot(flights, aes(dep_sched %% 60)) + geom_histogram(binwidth = 1)
+ggplot(flights, aes(air_time - airtime2)) + geom_histogram()
+```
+
+1.  Currently `dep_time` and `sched_dep_time` are convenient to look at, but
+    hard to compute with because they're not really continuous numbers. 
+    Convert them to a more convenient representation of number of minutes
+    since midnight.
+    
+```{r}
+# To speed things up in this session, below is a piece of code which writes a function for converting time in 24 hour HH:MM format to minutes past midnight. You can now use this function within a 'mutate' argument. (This answer was taken from the unofficial answers sheet but can be achieved using packages made specifically for this task e.g. 'libridate')
+
+time2mins <- function(x) {
+  (x %/% 100 * 60 + x %% 100) %% 1440
+}
+```
+    
+1.  Compare `air_time` with `arr_time - dep_time`. What do you expect to see?
+    What do you see? What do you need to do to fix it?
+    
+1.  Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you
+    expect those three numbers to be related?
+
+1.  Find the 10 most delayed flights using a ranking function. How do you want 
+    to handle ties? Carefully read the documentation for `min_rank()`.
