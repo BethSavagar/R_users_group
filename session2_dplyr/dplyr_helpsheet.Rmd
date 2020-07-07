@@ -1,0 +1,161 @@
+---
+title: "dplyr helpsheet"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# dplyr Helpsheet
+
+
+For more information on dplyr: https://dplyr.tidyverse.org/
+
+
+### Structure of dplyr code:
+
+
+Option 1:
+`verb(dataframe, action)`
+
+Option 2 (pipes):
+`dataframe %>% verb()`
+
+All dplyr functions return a dataframe which is a modified version of the dataframe which is supplied to the function. In order to save the result of a dplyr function an assignment operator is required to save the new dataframe under a given name. 
+
+
+### The 5 key verbs of `dplyr`:
+
+`select()` :  
+
+- used to 'select' variables in a dataframe. Useful to refine a large dataframe down to only the variables you are interested in.   
+- *Note: select returns a dataframe of the specified variables, in the same order as they are provided within `select()` e.g. `select('b', 'a', 'c')` outputs a dataframe with columns in order 'b', 'a', 'c'.*  
+
+`filter()` :
+
+- used to 'filter' the observations (rows) of a dataframe such that the output contains only the observations that fullfil a given condition. 
+
+`arrange()` :  
+
+- used to 'arrange' a dataframe by a given variable. Default is to arrange in ascending order. 
+
+`mutate()`  : 
+- used to add new columns which are functions of existing columns. 
+
+`summarise()`
+
+
+## Worked examples:
+
+```{r}
+
+library(dplyr) #load the dplyr package into the workspace
+
+# Explore the Iris dataset
+head(iris)
+
+```
+
+### Using `select()`
+
+Helper functions for `select()`
+
+- `starts_with("abc")` - selects all variables which start with the string contained in " ".
+- `ends_with("xyz")` - selects all variables which end with the string contained in " ".
+- `contains("ijk")` - - selects all variables which contain the string " ".
+- `everything()` - helpful for changing the order of variables in a dataframe e.g. `select(first_var, everything())`
+- `rename()` - a variant of `select()` which is used to rename variables
+
+```{r}
+# Use select() to make a new dataframe which only contains information about the species and petal length and width. 
+
+iris_petals <- select(iris, Petal.Length, Petal.Width, Species) #store the dataframe in your workplace as 'iris_petals'
+head(iris_petals)
+# alternate notation: iris %>% select(Petal.Length, Petal.Width, Species)
+```
+
+
+
+### Using filter()
+
+The conditions to be fulfilled by the new dataframe are contained within the brackets of filter('condition1', 'condition2'). When multiple conditions are applied, every observation in hte new dataframe must satisfy every condition. 
+
+For use with `filter()`
+
+- Comparisons: "greater than", "less than", "equal to"
+- Logical Operators: "and", "or" and "not"
+- `between()` : used to find observations with values between two numbers (see https://www.rdocumentation.org/packages/dplyr/versions/0.7.8/topics/between)
+
+You may need to read about Comparisons and Logical Operators to understand how conditions can be applied with the `filter()` function. See 5.2.1 and 5.2.2 of the R for Data Science book 
+
+```{r echo=TRUE}
+
+# Filter the iris dataframe to contains only observations from the versicolor species
+versicolor_df <- iris %>% filter(Species == 'versicolor')
+head(versicolor_df)
+
+# Use multiple conditions to filter the versicolor dataframe so that it only shows observations which has a petal length greater than 4.5 and a sepal length between 5.7 and 6.7
+versicolor_new <- versicolor_df %>% filter(Petal.Length > 4.5, 
+                                           between(Sepal.Length, 5.7, 6.7))
+```
+
+
+### Using arrange()
+
+If multiple variables are supplied to arrange the rows of the dataframe will be arranged by each variable in the order provided
+
+For use with `arrange()`
+
+- `desc()` : arrange observations in descending order
+
+```{r echo = TRUE}
+
+# Arrange the iris dataframe by Sepal.Length in ascending order and Sepal.Width in descending order
+
+sepal_order <- iris %>% arrange(Sepal.Length, desc(Sepal.Width))
+sepal_order[1:10, ]
+```
+
+
+### Using mutate()
+
+Usage: 
+
+`df %>% mutate(new_var_name = calculation)`  OR:  `mutate(df, new_var_name = calculation)`
+
+*Note: Multiple new variables can be created at the same time using mutate*
+*Note: new variables can be referred to immediately
+
+
+```{r}
+
+# Use mutate() to add a column containing the difference from the mean of each observation in Petal.Length
+
+mean.petal.length <- mean(iris$Petal.Length)
+
+iris_new <- iris %>% mutate(petal.length.diff = Petal.Length - mean.petal.length)
+head(iris_new)
+
+# Adding a column for the mean and using immediately to calculate the difference:
+
+iris_new2 <- iris %>% mutate(mean.petal.length = mean(Petal.Length), petal.length.diff = Petal.Length - mean.petal.length)
+
+```
+
+
+### Additional
+
+
+*All 5 functions can be used with `group_by()` which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using `summarise(mean = mean(height))` with `group_by(sex)` will return the mean height for boys and girls, rather than the mean height for all children in the dataset. *
+
+```{r}
+iris_new <- iris %>% group_by(Species) %>% mutate(meanPL = mean(Petal.Length), diff_PL = meanPL - Petal.Length)
+
+
+
+```
+
+
+An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for Data Science textbook (https://r4ds.had.co.nz/transform.html). This is the perfect resource to support this session and to defer to for further help with manipulating data.  
+
