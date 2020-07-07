@@ -40,7 +40,8 @@ All dplyr functions return a dataframe which is a modified version of the datafr
 
 - used to 'arrange' a dataframe by a given variable. Default is to arrange in ascending order. 
 
-`mutate()`  : 
+`mutate()`  :  
+
 - used to add new columns which are functions of existing columns. 
 
 `summarise()`
