@@ -7,8 +7,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+***********
 # INTRODUCTION: 
+***********
 
 ## What is dplyr?
 
@@ -33,24 +34,99 @@ An excellent introduction to data manipulation and transformation in R, using th
 
 We will be going over the exercises in this book today. 
 
-\newline
-\newline
 
+|  
+|  
+|  
 
+************
 # CHEAT SHEET
+************
 
 ## Important points
 
-Throughout these excercises, you can use the 'pipe' operator %>% which allows you to write clear code which can be read from left to right. The pipe takes the result of the thing before it, and 'pipes' it into the next function.
+1. Throughout these excercises, you can use the 'pipe' operator %>% which allows you to write clear code which can be read from left to right. The pipe takes the result of the thing before it, and 'pipes' it into the next function.
 
-x %>% f(y) turns into f(x, y) 
-
-
-\newline
-\newline
+                x %>% f(y) turns into f(x, y) 
 
 
+2. note that dplyr uses a new data type: the tibble, which is a modern reimagining of the dataframe used within tidyverse packages. For more info see https://tibble.tidyverse.org/
+
+
+## filter() syntax
+```{r eval = FALSE}
+# filter by two levels (examples using another dataset!):
+starwars %>% filter(skin_color == "light", eye_color == "brown")
+
+# Note that this is the same as: 
+filter(starwars, skin_color == "light", eye_color == "brown")
+
+# And similar to r base code:
+starwars[starwars$skin_color == "light" & starwars$eye_color == "brown", ]
+
+# When we add logical operators e.g. eye colour == blue OR brown, we wite like so:
+starwars %>% filter(eye_color == "blue" | eye_color == "brown")
+
+An easier way to do this is by using %in%
+filter(starwars, eye_colour %in% c("blue", "brown"))
+
+```
+
+# arrange() syntax
+    
+```{r eval = FALSE}
+starwars %>% arrange(height, mass)
+
+# to arrange in descending order, use
+starwars %>% arrange(desc(height))
+
+```
+
+# select() syntax
+
+```{r eval = FALSE}
+# selecct only these three variables
+starwars %>% select(hair_color, skin_color, eye_color)
+
+# select all variables between these two
+starwars %>% select(hair_color:eye_color)
+
+# select all BUT this variable
+starwars %>% select(-hair_color)
+
+# select all variables that end with "color" e.g. hair, eye, skin
+starwars %>% select(ends_with("color"))
+
+# There are a number of helper functions you can use within select(), like starts_with(), ends_with(), matches() and contains()
+```
+
+# mutate() syntax
+```{r eval = FALSE}
+# e.g. generate a new variable for height in metres
+starwars %>% mutate(height_m = height / 100)
+
+# as is similar to r base code:
+starwars$height_metres2 <- starwars$height /100
+
+# however, note that in the dpylr version, we don't actually see the new variable. To see these changes, we can use:
+starwars %>%
+  mutate(height_m = height / 100) %>%
+  select(height_m, height, everything())
+      # but the new variable is still not attached to the main data...we need to assign this to a new object
+```
+
+# summarise() syntax
+```{r eval = FALSE}
+
+starwars %>% summarise(height = mean(height, na.rm = TRUE))
+
+```
+|  
+|  
+|  
+********
 # EXERCISES 
+********
 
 ### Set up
 
@@ -173,3 +249,37 @@ time2mins <- function(x) {
 
 1.  Find the 10 most delayed flights using a ranking function. How do you want 
     to handle ties? Carefully read the documentation for `min_rank()`.
+
+
+### summarise()
+1.  Brainstorm at least 5 different ways to assess the typical delay 
+    characteristics of a group of flights. Consider the following scenarios:
+    
+    * A flight is 15 minutes early 50% of the time, and 15 minutes late 50% of 
+      the time.
+      
+    * A flight is always 10 minutes late.
+
+    * A flight is 30 minutes early 50% of the time, and 30 minutes late 50% of 
+      the time.
+      
+    * 99% of the time a flight is on time. 1% of the time it's 2 hours late.
+    
+    Which is more important: arrival delay or departure delay?
+
+1.  Come up with another approach that will give you the same output as 
+    `not_cancelled %>% count(dest)` and 
+    `not_cancelled %>% count(tailnum, wt = distance)` (without using 
+    `count()`).
+
+1.  Our definition of cancelled flights (`is.na(dep_delay) | is.na(arr_delay)`
+    ) is slightly suboptimal. Why? Which is the most important column?
+
+1.  Look at the number of cancelled flights per day. Is there a pattern?
+    Is the proportion of cancelled flights related to the average delay?
+
+1.  Which carrier has the worst delays? Challenge: can you disentangle the
+    effects of bad airports vs. bad carriers? Why/why not? (Hint: think about
+    `flights %>% group_by(carrier, dest) %>% summarise(n())`)
+
+1.  What does the `sort` argument to `count()` do. When might you use it?
