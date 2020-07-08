@@ -379,9 +379,15 @@ summary {
 </div>
 
 
+<p>Links to sections:</p>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#cheatsheet">Cheatsheet</a></li>
+<li><a href="#exercises">Exercises</a></li>
+</ul>
 <hr />
 <div id="introduction" class="section level1">
-<h1>INTRODUCTION:</h1>
+<h1><a id="introduction"></a>INTRODUCTION:</h1>
 <hr />
 <div id="what-is-dplyr" class="section level2">
 <h2>What is dplyr?</h2>
@@ -405,7 +411,7 @@ summary {
 </div>
 </div>
 <div id="cheat-sheet" class="section level1">
-<h1>CHEAT SHEET</h1>
+<h1><a id="cheatsheet"></a>CHEAT SHEET</h1>
 <hr />
 <div id="important-points" class="section level2">
 <h2>Important points</h2>
@@ -421,7 +427,8 @@ summary {
 <h3><code>filter()</code> syntax</h3>
 <ul>
 <li>Reminder: You may need to read about Comparisons and Logical Operators to understand how conditions can be applied with the filter() function.</li>
-<li>See 5.2.1 and 5.2.2 of the R for Data Science book</li>
+<li>See also <code>between()</code></li>
+<li>Sections 5.2.1 and 5.2.2 of the <a href="https://r4ds.had.co.nz/transform.html">R for Data Science book</a> provide more details</li>
 </ul>
 <pre class="r"><code># filter by two levels:
 starwars %&gt;% filter(skin_color == &quot;light&quot;, eye_color == &quot;brown&quot;)
@@ -435,49 +442,44 @@ starwars[starwars$skin_color == &quot;light&quot; &amp; starwars$eye_color == &q
 # When we add logical operators e.g. eye colour == blue OR brown, we write like so:
 starwars %&gt;% filter(eye_color == &quot;blue&quot; | eye_color == &quot;brown&quot;)
 
-An easier way to do this is by using %in%
-filter(starwars, eye_colour %in% c(&quot;blue&quot;, &quot;brown&quot;))</code></pre>
+ # OR using %in% :
+starwars %&gt;% filter(eye_colour %in% c(&quot;blue&quot;, &quot;brown&quot;))</code></pre>
 </div>
 <div id="arrange-syntax" class="section level3">
-<h3>arrange() syntax</h3>
+<h3><code>arrange()</code> syntax</h3>
 <pre class="r"><code>starwars %&gt;% arrange(height, mass)
 
-# to arrange in descending order, use
+# to arrange in descending order :
 starwars %&gt;% arrange(desc(height))</code></pre>
 </div>
 <div id="select-syntax" class="section level3">
-<h3>select() syntax</h3>
-<pre class="r"><code># selecct only these three variables
+<h3><code>select()</code> syntax</h3>
+<ul>
+<li>Helper functions: <code>starts_with()</code>, <code>ends_with()</code>, <code>matches()</code> and <code>contains()</code></li>
+</ul>
+<pre class="r"><code># select the hair_color, skin_color and eye_color variables
 starwars %&gt;% select(hair_color, skin_color, eye_color)
 
-# select all variables between these two
+# select all variables between hair_color and eye_color
 starwars %&gt;% select(hair_color:eye_color)
 
 # select all BUT this variable
-starwars %&gt;% select(-hair_color)
-
-# select all variables that end with &quot;color&quot; e.g. hair, eye, skin
-starwars %&gt;% select(ends_with(&quot;color&quot;))
-
-# There are a number of helper functions you can use within select(), like starts_with(), ends_with(), matches() and contains()</code></pre>
+starwars %&gt;% select(-hair_color)</code></pre>
 </div>
 <div id="mutate-syntax" class="section level3">
-<h3>mutate() syntax</h3>
-<pre class="r"><code># e.g. generate a new variable for height in metres
-starwars %&gt;% mutate(height_m = height / 100)
+<h3><code>mutate()</code> syntax</h3>
+<pre class="r"><code># create a new variable called height_m converting height from cm to m
+starwars %&gt;% mutate(height_m = height / 100) #note: you will need to assign this to a new dataframe to view the resulting variable
 
-# as is similar to r base code:
-starwars$height_metres2 &lt;- starwars$height /100
-
-# however, note that in the dpylr version, we don&#39;t actually see the new variable. To see these changes, we can use:
-starwars %&gt;%
-  mutate(height_m = height / 100) %&gt;%
-  select(height_m, height, everything())
-      # but the new variable is still not attached to the main data...we need to assign this to a new object</code></pre>
+# similar to baseR code: 
+starwars$height_metres2 &lt;- starwars$height /100</code></pre>
 </div>
 <div id="summarise-syntax" class="section level3">
-<h3>summarise() syntax</h3>
-<pre class="r"><code>starwars %&gt;% summarise(height = mean(height, na.rm = TRUE))</code></pre>
+<h3><code>summarise()</code> syntax</h3>
+<pre class="r"><code>starwars %&gt;% summarise(height = mean(height, na.rm = TRUE))
+
+#with group_by
+starwars %&gt;% group_by(species) %&gt;% summarise(height = mean(height, na.rm = TRUE))</code></pre>
 <div class="line-block"><br />
 <br />
 </div>
@@ -486,18 +488,19 @@ starwars %&gt;%
 </div>
 </div>
 <div id="exercises" class="section level1">
-<h1>EXERCISES</h1>
+<h1><a id="exercises"></a>EXERCISES</h1>
 <hr />
+<p>The solutions to these exercises can be found here: <a href="https://jrnold.github.io/r4ds-exercise-solutions/transform.html" class="uri">https://jrnold.github.io/r4ds-exercise-solutions/transform.html</a></p>
 <div id="set-up" class="section level3">
 <h3>Set up</h3>
 <ol style="list-style-type: decimal">
 <li><p>Load the <code>dplyr</code> package into the R workspace.<br />
 <em>Note: dplyr is contained within the tidyverse package, you can therefore choose whether to load the full tidyverse or only dplyr for this session</em></p></li>
-<li><p>Load your data (we will use the publicly available ‘flights’ dataset)<br />
-<em>Reminder: you will need to use <code>setwd()</code> to set the working directory for this session before you read in the .csv file</em><br />
+<li><p>Load your data (we will use the publicly available <code>&#39;flights&#39;</code> dataset)<br />
 </p></li>
 </ol>
 <ul>
+<li><em>Note: the <code>flights</code> dataset is part of the <code>nycflights13</code> package. You will need to install this package and load the library before you can access the data</em></li>
 <li>You may wish to explore the dataset to remind yourselves of its contents using some <strong>baseR</strong> commands e.g. <code>head()</code>, <code>View()</code>, <code>str()</code></li>
 </ul>
 <pre class="r"><code>#install.packages(&quot;tidyverse&quot;)
@@ -508,39 +511,38 @@ library(dplyr)
 
 
 #Load the flights data
+
+# install.packages(&quot;nycflights13&quot;)
 library(nycflights13)
 head(flights)</code></pre>
 </div>
 <div id="filter" class="section level3">
-<h3>filter()</h3>
+<h3><code>filter()</code></h3>
 <ol style="list-style-type: decimal">
-<li><p>Find all flights that</p>
-<ol style="list-style-type: decimal">
+<li><p>Find all flights that:</p>
+<ul>
 <li>Had an arrival delay of two or more hours</li>
 <li>Flew to Houston (<code>IAH</code> or <code>HOU</code>)</li>
-<li>Were operated by United, American, or Delta</li>
 <li>Departed in summer (July, August, and September)</li>
 <li>Arrived more than two hours late, but didn’t leave late</li>
-<li>Were delayed by at least an hour, but made up over 30 minutes in flight</li>
 <li>Departed between midnight and 6am (inclusive)</li>
-</ol></li>
-<li><p>Another useful dplyr filtering helper is <code>between()</code>. What does it do? Can you use it to simplify the code needed to answer the previous challenges?</p></li>
+</ul></li>
 <li><p>How many flights have a missing <code>dep_time</code>? What other variables are missing? What might these rows represent?</p></li>
 </ol>
 </div>
 <div id="arrange" class="section level3">
-<h3>arrange()</h3>
+<h3><code>arrange()</code></h3>
 <ol style="list-style-type: decimal">
 <li><p>How could you use <code>arrange()</code> to sort all missing values to the start? (Hint: use <code>is.na()</code>).</p></li>
-<li><p>Sort <code>flights</code> to find the most delayed flights. Find the flights that left earliest.</p></li>
+<li><p>Sort <code>flights</code> to find the most delayed flights.</p></li>
 <li><p>Sort <code>flights</code> to find the fastest (highest speed) flights.</p></li>
 <li><p>Which flights travelled the farthest? Which travelled the shortest?</p></li>
 </ol>
 </div>
 <div id="select" class="section level3">
-<h3>select()</h3>
+<h3><code>select()</code></h3>
 <ol style="list-style-type: decimal">
-<li><p>Brainstorm as many ways as possible to select <code>dep_time</code>, <code>dep_delay</code>, <code>arr_time</code>, and <code>arr_delay</code> from <code>flights</code>.</p></li>
+<li><p>Brainstorm as many ways as possible to select <code>dep_time</code>, <code>dep_delay</code>, <code>arr_time</code>, and <code>arr_delay</code> from <code>flights</code>. (Hint: think about using the select helper functions)</p></li>
 <li><p>What happens if you include the name of a variable multiple times in a <code>select()</code> call?</p></li>
 <li><p>What does the <code>one_of()</code> function do? Why might it be helpful in conjunction with this vector?</p>
 <pre class="r"><code>vars &lt;- c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;, &quot;dep_delay&quot;, &quot;arr_delay&quot;)</code></pre></li>

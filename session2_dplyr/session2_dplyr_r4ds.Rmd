@@ -7,8 +7,17 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Links to sections: 
+
+- [Introduction](#introduction)
+- [Cheatsheet](#cheatsheet)
+- [Exercises](#exercises)
+
+
+
+
 ***********
-# INTRODUCTION: 
+# <a id="introduction"></a>INTRODUCTION: 
 ***********
 
 ## What is dplyr?
@@ -34,7 +43,7 @@ An excellent introduction to data manipulation and transformation in R, using th
 |  
 
 ************
-# CHEAT SHEET
+# <a id="cheatsheet"></a>CHEAT SHEET
 ************
 
 ## Important points
@@ -54,7 +63,7 @@ An excellent introduction to data manipulation and transformation in R, using th
 ### `filter()` syntax
 - Reminder: You may need to read about Comparisons and Logical Operators to understand how conditions can be applied with the filter() function. 
 - See also `between()`
-- Sections 5.2.1 and 5.2.2 of the R for Data Science book provide more details
+- Sections 5.2.1 and 5.2.2 of the [R for Data Science book](https://r4ds.had.co.nz/transform.html) provide more details
 
 ```{r eval = FALSE}
 # filter by two levels:
@@ -97,7 +106,6 @@ starwars %>% select(hair_color:eye_color)
 # select all BUT this variable
 starwars %>% select(-hair_color)
 
-
 ```
 
 ### `mutate()` syntax
@@ -110,7 +118,7 @@ starwars$height_metres2 <- starwars$height /100
 
 ```
 
-### summarise() syntax
+### `summarise()` syntax
 ```{r eval = FALSE}
 starwars %>% summarise(height = mean(height, na.rm = TRUE))
 
@@ -122,16 +130,18 @@ starwars %>% group_by(species) %>% summarise(height = mean(height, na.rm = TRUE)
 |  
 |  
 ********
-# EXERCISES 
+# <a id="exercises"></a>EXERCISES 
 ********
+
+The solutions to these exercises can be found here: https://jrnold.github.io/r4ds-exercise-solutions/transform.html
 
 ### Set up
 
 1. Load the `dplyr` package into the R workspace.  
 *Note: dplyr is contained within the tidyverse package, you can therefore choose whether to load the full tidyverse or only dplyr for this session*
 
-2. Load your data (we will use the publicly available 'flights' dataset)  
-*Reminder: you will need to use `setwd()` to set the working directory for this session before you read in the .csv file*  
+2. Load your data (we will use the publicly available `'flights'` dataset)  
+- *Note: the `flights` dataset is part of the `nycflights13` package. You will need to install this package and load the library before you can access the data*
 - You may wish to explore the dataset to remind yourselves of its contents using some **baseR** commands e.g. `head()`, `View()`, `str()`  
 
 ```{r eval=FALSE}
@@ -144,40 +154,34 @@ library(dplyr)
 
 
 #Load the flights data
+
+# install.packages("nycflights13")
 library(nycflights13)
 head(flights)
 
 ```
 
 
-### filter()
+### `filter()`
 
-1.  Find all flights that
+1.  Find all flights that:
 
-    1. Had an arrival delay of two or more hours
-    1. Flew to Houston (`IAH` or `HOU`)
-    1. Were operated by United, American, or Delta
-    1. Departed in summer (July, August, and September)
-    1. Arrived more than two hours late, but didn't leave late
-    1. Were delayed by at least an hour, but made up over 30 minutes in flight
-    1. Departed between midnight and 6am (inclusive)
+    - Had an arrival delay of two or more hours
+    - Flew to Houston (`IAH` or `HOU`)
+    - Departed in summer (July, August, and September)
+    - Arrived more than two hours late, but didn't leave late
+    - Departed between midnight and 6am (inclusive)
 
-1.  Another useful dplyr filtering helper is `between()`. What does it do?
-    Can you use it to simplify the code needed to answer the previous 
-    challenges?
-
-1.  How many flights have a missing `dep_time`? What other variables are 
+2.  How many flights have a missing `dep_time`? What other variables are 
     missing? What might these rows represent?
 
-
  
-### arrange()
+### `arrange()`
 
 1.  How could you use `arrange()` to sort all missing values to the start?
     (Hint: use `is.na()`).
     
-1.  Sort `flights` to find the most delayed flights. Find the flights that
-    left earliest.
+1.  Sort `flights` to find the most delayed flights.
 
 1.  Sort `flights` to find the fastest (highest speed) flights.
 
@@ -185,10 +189,10 @@ head(flights)
 
 
 
-### select()
+### `select()`
 
 1.  Brainstorm as many ways as possible to select `dep_time`, `dep_delay`,
-    `arr_time`, and `arr_delay` from `flights`.
+    `arr_time`, and `arr_delay` from `flights`. (Hint: think about using the select helper functions)
     
 1.  What happens if you include the name of a variable multiple times in
     a `select()` call?
@@ -209,7 +213,7 @@ head(flights)
 
 
 
-### mutate()
+### `mutate()`
 
 
 ```{r, eval = FALSE, echo = FALSE}
@@ -248,7 +252,7 @@ time2mins <- function(x) {
     to handle ties? Carefully read the documentation for `min_rank()`.
 
 
-### summarise()
+### `summarise()`
 1.  Brainstorm at least 5 different ways to assess the typical delay 
     characteristics of a group of flights. Consider the following scenarios:
     
