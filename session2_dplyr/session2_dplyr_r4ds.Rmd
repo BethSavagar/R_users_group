@@ -15,25 +15,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this session we will be focusing on **data manipulation** with the `dplyr` package. Dplyr is one of the packages within the `tidyverse` group, which contains a number of core R packages including `dplyr`, `ggplot2`, `tidyr`, `purrr` amongst others. The tidyverse is a group of packages which are designed to simplify data science and share a common design philosophy, 'grammar' and data structures (see here for more information about the tidyverse: https://www.tidyverse.org/).
 
-When working with datasets, they won't often come in the form that you want or need them - in this case it may be necessary to create subsets of data, add new variables, or rename them to make things easier to understand. Most of this **can be achieved** using base R commands but `dplyr` provides an alternative (neater, simpler?) way to do these manipulations. The `dplyr` package provides a 'grammar' of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges: 
+`dplyr` provides an alternative, and potentially more efficient/intuitive way to do data manipulation without using baseR commands.The `dplyr` package provides a 'grammar' of data manipulation and comes with 5 core functions which can be used to solve most data manupulation challenges:  
+
 For more information on dplyr: https://dplyr.tidyverse.org/
 
-- `filter()`    (chose rows based on column values; like filter in Excel)
-- `arrange()`   (change the order or rows; like sort in Excel)
-- `select()`    (change whether or not a column is selected)
-- `mutate()`    (for creating new variables)
-- `summarise()` (collapse a group into a single row)
-
-*All 5 functions can be used with `group_by()` which enables you to take a dataset and perform a command on a group-by-group basis. For example if you have a dataset of heights and weights for 100 children and a variable containing their sex, using `summarise(mean = mean(height))` with `group_by(sex)` will return the mean height for boys and girls, rather than the mean height for all children in the dataset. *
-
-The tasks below can be completed using the dplyr verbs as your core functions, however (as you may have seen) one of the ... of R/coding is that there are often multiple solutions to the same  problem, so feel free to explore these or use your existing knowledge to answer the below - you can then compare your approach with the dplyr method and see which you prefer. 
+- `filter()`    : filters the observations (rows) of a dataframe; like 'filter' in Excel  
+- `arrange()`   : sets the order of observations (rows) according to a particular variable (column); like 'sort' in Excel
+- `select()`    : used to select variables (columns) of a dataframe, useful for refining a dataframe to only the variables of interest
+- `mutate()`    : creates new variables as a function of existing variables
+- `summarise()` : provides summary statistics for a given variables (often used with `group_by` to produce grouped summary statistics)
 
 **Support/resources**
 
-An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for Data Science textbook (https://r4ds.had.co.nz/transform.html). This is the perfect resource to support this session and to defer to for further help with manipulating data.  
-
-We will be going over the exercises in this book today. 
-
+An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for Data Science textbook (https://r4ds.had.co.nz/transform.html). In today's session we will be working through the exercises from this book.
 
 |  
 |  
@@ -45,17 +39,25 @@ We will be going over the exercises in this book today.
 
 ## Important points
 
-1. Throughout these excercises, you can use the 'pipe' operator %>% which allows you to write clear code which can be read from left to right. The pipe takes the result of the thing before it, and 'pipes' it into the next function.
-
-                x %>% f(y) turns into f(x, y) 
+1. Throughout these excercises, you can use the 'pipe' operator %>% which allows you to write clear code which can be read from left to right. The pipe takes the result of whatever is on the left of it, and 'pipes' it into the next function.
 
 
-2. note that dplyr uses a new data type: the tibble, which is a modern reimagining of the dataframe used within tidyverse packages. For more info see https://tibble.tidyverse.org/
+                x %>% f(y) becomes f(x, y)
+                e.g. 
+                iris %>% select(Petal.Length) becomes select(iris,Petal.Length)  
 
+2. Note that dplyr uses a new data type: the tibble, which is a modern reimagining of the dataframe used within tidyverse packages. For more info see https://tibble.tidyverse.org/
 
-## filter() syntax
+**Example syntax:**
+- The examples below use the `starwars` dataset.
+
+### `filter()` syntax
+- Reminder: You may need to read about Comparisons and Logical Operators to understand how conditions can be applied with the filter() function. 
+- See also `between()`
+- Sections 5.2.1 and 5.2.2 of the R for Data Science book provide more details
+
 ```{r eval = FALSE}
-# filter by two levels (examples using another dataset!):
+# filter by two levels:
 starwars %>% filter(skin_color == "light", eye_color == "brown")
 
 # Note that this is the same as: 
@@ -64,61 +66,56 @@ filter(starwars, skin_color == "light", eye_color == "brown")
 # And similar to r base code:
 starwars[starwars$skin_color == "light" & starwars$eye_color == "brown", ]
 
-# When we add logical operators e.g. eye colour == blue OR brown, we wite like so:
+# When we add logical operators e.g. eye colour == blue OR brown, we write like so:
 starwars %>% filter(eye_color == "blue" | eye_color == "brown")
 
-An easier way to do this is by using %in%
-filter(starwars, eye_colour %in% c("blue", "brown"))
+ # OR using %in% :
+starwars %>% filter(eye_colour %in% c("blue", "brown"))
 
 ```
 
-# arrange() syntax
+### `arrange()` syntax
     
 ```{r eval = FALSE}
 starwars %>% arrange(height, mass)
 
-# to arrange in descending order, use
+# to arrange in descending order :
 starwars %>% arrange(desc(height))
 
 ```
 
-# select() syntax
+### `select()` syntax
+- Helper functions: `starts_with()`, `ends_with()`, `matches()` and `contains()`
 
 ```{r eval = FALSE}
-# selecct only these three variables
+# select the hair_color, skin_color and eye_color variables
 starwars %>% select(hair_color, skin_color, eye_color)
 
-# select all variables between these two
+# select all variables between hair_color and eye_color
 starwars %>% select(hair_color:eye_color)
 
 # select all BUT this variable
 starwars %>% select(-hair_color)
 
-# select all variables that end with "color" e.g. hair, eye, skin
-starwars %>% select(ends_with("color"))
 
-# There are a number of helper functions you can use within select(), like starts_with(), ends_with(), matches() and contains()
 ```
 
-# mutate() syntax
+### `mutate()` syntax
 ```{r eval = FALSE}
-# e.g. generate a new variable for height in metres
-starwars %>% mutate(height_m = height / 100)
+# create a new variable called height_m converting height from cm to m
+starwars %>% mutate(height_m = height / 100) #note: you will need to assign this to a new dataframe to view the resulting variable
 
-# as is similar to r base code:
+# similar to baseR code: 
 starwars$height_metres2 <- starwars$height /100
 
-# however, note that in the dpylr version, we don't actually see the new variable. To see these changes, we can use:
-starwars %>%
-  mutate(height_m = height / 100) %>%
-  select(height_m, height, everything())
-      # but the new variable is still not attached to the main data...we need to assign this to a new object
 ```
 
-# summarise() syntax
+### summarise() syntax
 ```{r eval = FALSE}
-
 starwars %>% summarise(height = mean(height, na.rm = TRUE))
+
+#with group_by
+starwars %>% group_by(species) %>% summarise(height = mean(height, na.rm = TRUE))
 
 ```
 |  
