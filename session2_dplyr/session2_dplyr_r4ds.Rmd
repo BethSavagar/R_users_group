@@ -145,7 +145,7 @@ max()
 |  
 |  
 ********
-# <a id="exercises"></a>SYNTAX EXAMPLES 
+# <a id="exercises"></a>EXERCISES 
 ********
 
 The solutions to these exercises can be found here: https://jrnold.github.io/r4ds-exercise-solutions/transform.html
