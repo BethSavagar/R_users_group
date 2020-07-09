@@ -36,7 +36,7 @@ For more information on dplyr: https://dplyr.tidyverse.org/
 
 **Support/resources**
 
-An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for Data Science textbook (https://r4ds.had.co.nz/transform.html). In today's session we will be working through the exercises from this book.
+An excellent introduction to data manipulation and transformation in R, using the `tidyverse` and `dplyr`, is given in Chapter 5 of the R for [Data Science textbook](https://r4ds.had.co.nz/transform.html). In today's session we will be working through the exercises from this book.
 
 |  
 |  
@@ -57,7 +57,7 @@ An excellent introduction to data manipulation and transformation in R, using th
 
 2. Note that dplyr uses a new data type: the tibble, which is a modern reimagining of the dataframe used within tidyverse packages. For more info see https://tibble.tidyverse.org/
 
-**Example syntax:**
+## Example syntax:
 - The examples below use the `starwars` dataset.
 
 ### `filter()` syntax
@@ -119,6 +119,7 @@ starwars$height_metres2 <- starwars$height /100
 ```
 
 ### `summarise()` syntax
+- You will often want to use in conjunction with `group_by()`
 ```{r eval = FALSE}
 starwars %>% summarise(height = mean(height, na.rm = TRUE))
 

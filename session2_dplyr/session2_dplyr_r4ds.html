@@ -403,7 +403,7 @@ summary {
 <li><code>summarise()</code> : provides summary statistics for a given variables (often used with <code>group_by</code> to produce grouped summary statistics)</li>
 </ul>
 <p><strong>Support/resources</strong></p>
-<p>An excellent introduction to data manipulation and transformation in R, using the <code>tidyverse</code> and <code>dplyr</code>, is given in Chapter 5 of the R for Data Science textbook (<a href="https://r4ds.had.co.nz/transform.html" class="uri">https://r4ds.had.co.nz/transform.html</a>). In today’s session we will be working through the exercises from this book.</p>
+<p>An excellent introduction to data manipulation and transformation in R, using the <code>tidyverse</code> and <code>dplyr</code>, is given in Chapter 5 of the R for <a href="https://r4ds.had.co.nz/transform.html">Data Science textbook</a>. In today’s session we will be working through the exercises from this book.</p>
 <div class="line-block"><br />
 <br />
 </div>
@@ -422,7 +422,12 @@ summary {
          iris %&gt;% select(Petal.Length) becomes select(iris,Petal.Length)  </code></pre></li>
 <li><p>Note that dplyr uses a new data type: the tibble, which is a modern reimagining of the dataframe used within tidyverse packages. For more info see <a href="https://tibble.tidyverse.org/" class="uri">https://tibble.tidyverse.org/</a></p></li>
 </ol>
-<p><strong>Example syntax:</strong> - The examples below use the <code>starwars</code> dataset.</p>
+</div>
+<div id="example-syntax" class="section level2">
+<h2>Example syntax:</h2>
+<ul>
+<li>The examples below use the <code>starwars</code> dataset.</li>
+</ul>
 <div id="filter-syntax" class="section level3">
 <h3><code>filter()</code> syntax</h3>
 <ul>
@@ -476,6 +481,9 @@ starwars$height_metres2 &lt;- starwars$height /100</code></pre>
 </div>
 <div id="summarise-syntax" class="section level3">
 <h3><code>summarise()</code> syntax</h3>
+<ul>
+<li>You will often want to use in conjunction with <code>group_by()</code></li>
+</ul>
 <pre class="r"><code>starwars %&gt;% summarise(height = mean(height, na.rm = TRUE))
 
 #with group_by
@@ -551,7 +559,7 @@ head(flights)</code></pre>
 </ol>
 </div>
 <div id="mutate" class="section level3">
-<h3>mutate()</h3>
+<h3><code>mutate()</code></h3>
 <ol style="list-style-type: decimal">
 <li>Currently <code>dep_time</code> and <code>sched_dep_time</code> are convenient to look at, but hard to compute with because they’re not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.</li>
 </ol>
@@ -567,7 +575,7 @@ time2mins &lt;- function(x) {
 </ol>
 </div>
 <div id="summarise" class="section level3">
-<h3>summarise()</h3>
+<h3><code>summarise()</code></h3>
 <ol style="list-style-type: decimal">
 <li><p>Brainstorm at least 5 different ways to assess the typical delay characteristics of a group of flights. Consider the following scenarios:</p>
 <ul>
