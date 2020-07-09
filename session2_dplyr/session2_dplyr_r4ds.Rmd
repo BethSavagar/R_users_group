@@ -34,7 +34,7 @@ An excellent introduction to data manipulation and transformation in R, using th
 |  
 
 ************
-# CHEAT SHEET
+# SYNTAX EXAMPLES
 ************
 
 ## Important points
@@ -71,6 +71,10 @@ starwars %>% filter(eye_color == "blue" | eye_color == "brown")
 
  # OR using %in% :
 starwars %>% filter(eye_colour %in% c("blue", "brown"))
+
+# Filter out na's (note you should never use == "NA") 
+starwars %>% filter(!is.na(variable1))
+    # here we're saying NOT (!) is.na i.e filter all those that are not na's
 
 ```
 
@@ -112,10 +116,21 @@ starwars$height_metres2 <- starwars$height /100
 
 ### summarise() syntax
 ```{r eval = FALSE}
-starwars %>% summarise(height = mean(height, na.rm = TRUE))
+# find the mean of all heighs and name it "height1" and ignore the na's
+starwars %>% summarise(height1 = mean(height, na.rm = TRUE))
 
-#with group_by
+# find mean heights grouped by species 
 starwars %>% group_by(species) %>% summarise(height = mean(height, na.rm = TRUE))
+
+# as above but also return a count (n). Note you can add more and more summary measures into this one line to generate a nice summary table 
+starwars %>% group_by(species) %>% summarise(height = mean(height, na.rm = TRUE), count = n())
+
+# other useful base summary measures that can be used here
+sd()
+IQR()
+min()
+max()
+
 
 ```
 |  
@@ -158,16 +173,13 @@ head(flights)
     1. Flew to Houston (`IAH` or `HOU`)
     1. Were operated by United, American, or Delta
     1. Departed in summer (July, August, and September)
-    1. Arrived more than two hours late, but didn't leave late
-    1. Were delayed by at least an hour, but made up over 30 minutes in flight
-    1. Departed between midnight and 6am (inclusive)
 
 1.  Another useful dplyr filtering helper is `between()`. What does it do?
     Can you use it to simplify the code needed to answer the previous 
     challenges?
 
 1.  How many flights have a missing `dep_time`? What other variables are 
-    missing? What might these rows represent?
+    missing? What might these rows represent? Filter out this missing data
 
 
  
@@ -238,7 +250,7 @@ time2mins <- function(x) {
 }
 ```
     
-1.  Compare `air_time` with `arr_time - dep_time`. What do you expect to see?
+1.  Compare `air_time` with `arr_time - dep_time`. What do you expect to see? (Use mutate to generate a new variable for arr_time - dep_time for comparison)
     What do you see? What do you need to do to fix it?
     
 1.  Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you
@@ -249,28 +261,14 @@ time2mins <- function(x) {
 
 
 ### summarise()
-1.  Brainstorm at least 5 different ways to assess the typical delay 
-    characteristics of a group of flights. Consider the following scenarios:
-    
-    * A flight is 15 minutes early 50% of the time, and 15 minutes late 50% of 
-      the time.
-      
-    * A flight is always 10 minutes late.
 
-    * A flight is 30 minutes early 50% of the time, and 30 minutes late 50% of 
-      the time.
-      
-    * 99% of the time a flight is on time. 1% of the time it's 2 hours late.
-    
-    Which is more important: arrival delay or departure delay?
+1.  Find the mean departure delay time of all flights (don't forget to account for na's in the data)  
 
-1.  Come up with another approach that will give you the same output as 
-    `not_cancelled %>% count(dest)` and 
-    `not_cancelled %>% count(tailnum, wt = distance)` (without using 
-    `count()`).
+1. For each destination, what is the the mean distance, mean arrival delay, and total number of flights? Note, this can all be returned in a single line.
 
-1.  Our definition of cancelled flights (`is.na(dep_delay) | is.na(arr_delay)`
-    ) is slightly suboptimal. Why? Which is the most important column?
+1.  For each day of the year, what was the mean departure delay?   
+
+#### Bonus summarise questions
 
 1.  Look at the number of cancelled flights per day. Is there a pattern?
     Is the proportion of cancelled flights related to the average delay?
